@@ -14,7 +14,25 @@ const users = { items: [
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
+  
   res.send(users.items);
+});
+
+router.get('/:id', function(req, res, next) {
+  let user = null;
+  let findUser = false;
+
+  for (const us of users.items) {
+    if (us["id"] == req.params["id"]) {
+      user = us;
+      findUser = true;
+      break
+    }
+  }
+
+  if (!findUser)
+    res.status(404)
+  res.send(user);
 });
 
 router.post('/', function(req, res, next) {
