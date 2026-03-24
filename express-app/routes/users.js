@@ -17,4 +17,9 @@ router.get('/', function(req, res, next) {
   res.send(users.items);
 });
 
+router.post('/', function(req, res, next) {
+    users.items.push(req.body);
+    res.status(201).json(req.body);
+})
+
 module.exports = router;
