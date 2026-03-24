@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
+const sqlite3 = require('sqlite3').verbose()
+const db = new sqlite3.Database('mydb.db');
+db.run(`CREATE TABLE IF NOT EXISTS users (
+   id INTEGER PRIMARY KEY AUTOINCREMENT,
+   name text)`);
 const users = { items: [
   {
     "id": 1,
@@ -14,7 +19,13 @@ const users = { items: [
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  
+  db.all("SELECT id, name FROM users", [], (err, rows) => {
+    if (err) {
+       console.log(err);
+    } else {
+       res.send(rows);
+    }
+ });
   res.send(users.items);
 });
 
@@ -36,8 +47,10 @@ router.get('/:id', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-    users.items.push(req.body);
-    res.status(201).json(req.body);
+  const insert = "INSERT INTO users (name) VALUES (?)";
+  db.run(insert, [req.body["name"]]);
+  users.items.push(req.body);
+  res.status(201).json(req.body);
 })
 
 module.exports = router;
