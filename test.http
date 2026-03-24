@@ -1,6 +1,2 @@
-POST http://localhost:3000/users?auth=true
+GET http://localhost:3000/users/1?auth=true
 Content-Type: application/json
-
-{
-   "name": "Иван2"
-}

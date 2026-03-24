@@ -19,20 +19,27 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res, next) {
-  let user = null;
-  let findUser = false;
-
-  for (const us of users.items) {
-    if (us["id"] == req.params["id"]) {
-      user = us;
-      findUser = true;
-      break
+  db.all("SELECT id, name FROM users", [], (err, rows) => {
+    if (err) {
+       console.log(err);
+    } else {
+      let user = null;
+      let findUser = false;
+    
+      for (const us of rows) {
+        if (us["id"] == req.params["id"]) {
+          user = us;
+          findUser = true;
+          break
+        }
+      }
+    
+      if (!findUser)
+        res.status(404)
+      res.send(user);
     }
-  }
-
-  if (!findUser)
-    res.status(404)
-  res.send(user);
+ });
+  
 });
 
 router.post('/', function(req, res, next) {
