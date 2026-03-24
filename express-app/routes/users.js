@@ -6,16 +6,6 @@ const db = new sqlite3.Database('mydb.db');
 db.run(`CREATE TABLE IF NOT EXISTS users (
    id INTEGER PRIMARY KEY AUTOINCREMENT,
    name text)`);
-const users = { items: [
-  {
-    "id": 1,
-    "name": "Александра"
- },
- {
-  "id": 2,
-  "name": "Данила"
-}
-]}
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -26,7 +16,6 @@ router.get('/', function(req, res, next) {
        res.send(rows);
     }
  });
-  res.send(users.items);
 });
 
 router.get('/:id', function(req, res, next) {
@@ -49,7 +38,6 @@ router.get('/:id', function(req, res, next) {
 router.post('/', function(req, res, next) {
   const insert = "INSERT INTO users (name) VALUES (?)";
   db.run(insert, [req.body["name"]]);
-  users.items.push(req.body);
   res.status(201).json(req.body);
 })
 
